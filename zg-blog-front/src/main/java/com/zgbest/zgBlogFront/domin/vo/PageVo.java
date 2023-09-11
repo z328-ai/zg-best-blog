@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PageVo {
     private List<ArticlesVo> list;
+    private String likeTitle;
     private Long total;
     private Integer pages;
     private Integer currentPage;

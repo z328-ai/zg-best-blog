@@ -15,7 +15,7 @@ spring:
       password: Xinjing@12345
       driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:
-  type-aliases-package: com/zgbest/zgBlogFront.domin.entity
+  type-aliases-package: com.zgbest.zgBlogFront.domin
   mapper-locations: classpath*:mapper/*Mapper.xml
   configuration:
     map-underscore-to-camel-case: true

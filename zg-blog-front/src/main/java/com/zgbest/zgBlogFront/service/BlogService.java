@@ -5,8 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zgbest.zgBlogFront.domin.entity.Articles;
-import com.zgbest.zgBlogFront.domin.vo.ArticlesVo;
-import com.zgbest.zgBlogFront.domin.vo.PageVo;
+import com.zgbest.zgBlogFront.domin.vo.*;
 import com.zgbest.zgBlogFront.mapper.BlogMapper;
 import com.zgbest.zgBlogFront.util.DateFormat;
 import org.springframework.beans.BeanUtils;
@@ -21,11 +20,11 @@ public class BlogService {
     @Autowired
     private BlogMapper blogMapper;
 
-    public PageVo AllArticle(Integer pageNum, Integer pageSize){
+    public PageVo AllArticle(Integer pageNum, Integer pageSize,String title){
         //查询出pageInfo包含分页插件查出的所有数据
         PageHelper.clearPage();
         PageHelper.startPage(pageNum,pageSize);
-        Page<Articles> articles = blogMapper.allArticles();
+        Page<Articles> articles = blogMapper.allArticles('%'+ title + '%');
         PageInfo<Articles> articlesPageInfo = new PageInfo<>(articles);
 
 //        拿出list进行Article的date数据格式化
@@ -37,8 +36,37 @@ public class BlogService {
             return articlesVo;
         }).collect(Collectors.toList());
 //      开始封装pageVo
-        PageVo pageVo = new PageVo(list, articlesPageInfo.getTotal(), articlesPageInfo.getPages(), pageNum);
+        PageVo pageVo = new PageVo(list, title,articlesPageInfo.getTotal(), articlesPageInfo.getPages(), pageNum);
         System.out.println(pageVo);
         return pageVo;
     }
+
+    public List<ArticleTypeVo> allArticleType(){
+        List<ArticleTypeVo> articleTypeVos = blogMapper.allArticleType();
+        return articleTypeVos;
+    }
+
+    public List<TagsVo> allTags(){
+        List<TagsVo> tagsVos = blogMapper.allTagsVo();
+        return tagsVos;
+    }
+
+    public List<PopularArticleVo> popularArticle(){
+        List<PopularArticleVo> popularArticleVos = blogMapper.popularArticle();
+        return popularArticleVos;
+    }
+//    public ArticleTimeNumVo articleTimeNum(){
+//        ArticleTimeNumVo articleTimeNumVo = new ArticleTimeNumVo();
+//        int month = 9;
+//        String startTime = "";
+//        String endTime = "";
+//        for (int i = 0; i < 5; i++) {
+//            if(month+1==12)
+//            startTime = "2023-0"+month+"-01";
+//            endTime = "2023-0"+(month+1)+"-01";
+//            Integer integer = blogMapper.articleTimeNum(startTime, endTime);
+//            articleTimeNumVo.nums.add(integer);
+//        }
+//        return articleTimeNumVo;
+//    }
 }

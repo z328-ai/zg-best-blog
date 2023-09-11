@@ -8,7 +8,35 @@
          id  唯一标识，要与命名空间（抽象方法）中定义的方法名称一致
  -->
 <mapper namespace="com.zgbest.zgBlogFront.mapper.BlogMapper">
-     <select id="allArticles" resultType="com.zgbest.zgBlogFront.domin.entity.Articles">
-         select * from articles a inner join article_type atype on a.article_type_id = atype.id order by a.id desc
+    <select id="allArticles" resultType="Articles">
+         select * from articles a
+         inner join
+         article_type atype
+         on a.article_type_id = atype.id
+         <where>
+            <if test="title != '' and title != null">
+                a.title like #{title}
+            </if>
+         </where>
+         order by a.id desc
      </select>
+
+    <select id="allArticleType" resultType="ArticleTypeVo">
+         SELECT atype.article_type_name,count(*) as article_num
+         FROM articles AS a
+         INNER JOIN article_type AS atype ON a.article_type_id = atype.id
+         GROUP BY atype.article_type_name
+         HAVING count(*)>0;
+    </select>
+
+    <select id="allTagsVo" resultType="TagsVo">
+        select * from tags;
+    </select>
+    <select id="popularArticle" resultType="PopularArticleVo">
+         select * from articles a inner join article_type atype on a.article_type_id = atype.id order by a.id desc limit 0,3;
+    </select>
+
+<!--    <select id="articleTimeNum" resultType="Integer">-->
+<!--       select count(*) from articles where created between #{startTime} and #{endTime};-->
+<!--    </select>-->
 </mapper>

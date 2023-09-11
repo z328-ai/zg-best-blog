@@ -1,17 +1,16 @@
 package com.zgbest.zgBlogFront.domin.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class ArticlesVo {
+@AllArgsConstructor
+@NoArgsConstructor
+public class PopularArticleVo {
     private Integer Id;
     private String title;
-    private String articleTypeName;
-    private String content;
     private String created;
-    private Integer views;
     private Integer comments;
     private String articleImg;
-
-
 }
