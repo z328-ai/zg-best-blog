@@ -27,9 +27,10 @@ public class BlogController {
     public ModelAndView BlogController
              (@RequestParam(name = "pageNum",defaultValue = "1") int pageNum,
               @RequestParam(name = "pageSize",defaultValue = "6") int pageSize,
-             @RequestParam(name = "likeTitle",defaultValue = "") String likeTitle){
+             @RequestParam(name = "likeTitle",defaultValue = "") String likeTitle,
+              @RequestParam(name = "articleByType",defaultValue = "") String articleByType){
          ModelAndView modelAndView = new ModelAndView();
-         PageVo pageVo = blogService.AllArticle(pageNum, pageSize,likeTitle);
+         PageVo pageVo = blogService.AllArticle(pageNum, pageSize,likeTitle,articleByType);
          List<ArticleTypeVo> articleTypeVos = blogService.allArticleType();
          List<PopularArticleVo> popularArticleVos = blogService.popularArticle();
 

@@ -13,4 +13,5 @@ public class PageVo {
     private Long total;
     private Integer pages;
     private Integer currentPage;
+    private String articleByType;
 }

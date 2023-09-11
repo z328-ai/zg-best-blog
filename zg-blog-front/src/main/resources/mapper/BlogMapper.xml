@@ -17,6 +17,9 @@
             <if test="title != '' and title != null">
                 a.title like #{title}
             </if>
+            <if test="articleByType !='' and articleByType !=null ">
+                atype.article_type_name = #{articleByType}
+            </if>
          </where>
          order by a.id desc
      </select>
@@ -33,7 +36,7 @@
         select * from tags;
     </select>
     <select id="popularArticle" resultType="PopularArticleVo">
-         select * from articles a inner join article_type atype on a.article_type_id = atype.id order by a.id desc limit 0,3;
+         select * from articles a inner join article_type atype on a.article_type_id = atype.id order by a.comments desc limit 0,3;
     </select>
 
 <!--    <select id="articleTimeNum" resultType="Integer">-->

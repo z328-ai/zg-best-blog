@@ -93,7 +93,7 @@
 										<li><a href="#">&lt;</a></li>
 										<li th:each="n : ${#numbers.sequence(1, pageVo.pages)}"
 											th:classappend="${n == pageVo.currentPage} ? 'active' : ''">
-											<a th:href="@{'blog?pageNum='+${n} + '&&likeTitle='+${pageVo.likeTitle}} ">
+											<a th:href="@{'blog?pageNum='+${n} + '&&likeTitle='+${pageVo.likeTitle} + '&&articleByType='+${pageVo.articleByType}}">
 												<span th:text="${n}">
 												</span>
 											</a>
@@ -117,7 +117,7 @@
 							<h3 class="sidebar-heading">文章类型</h3>
 							<ul class="categories">
 								<li th:each="articleTypeVo : ${articleTypeVos}" style="display: flex;justify-content: space-between">
-										<a href="#" th:text="${articleTypeVo.articleTypeName}" style="display: inline-block;"></a>
+										<a th:href="@{'blog?articleByType='+${articleTypeVo.articleTypeName}}" th:text="${articleTypeVo.articleTypeName}" style="display: inline-block;"></a>
 										<span th:text="'('+ ${articleTypeVo.articleNum} + ')' " style="display: inline-block;"></span>
 								</li>
 							</ul>

@@ -20,11 +20,24 @@ public class BlogService {
     @Autowired
     private BlogMapper blogMapper;
 
-    public PageVo AllArticle(Integer pageNum, Integer pageSize,String title){
+    public PageVo AllArticle(Integer pageNum, Integer pageSize,String title,String articleByType){
         //查询出pageInfo包含分页插件查出的所有数据
         PageHelper.clearPage();
-        PageHelper.startPage(pageNum,pageSize);
-        Page<Articles> articles = blogMapper.allArticles('%'+ title + '%');
+        Page<Articles> articles = null;
+        if(title.isEmpty() || articleByType.isEmpty()){
+            PageHelper.startPage(pageNum,pageSize);
+            articles = blogMapper.allArticles(title,articleByType);
+        }
+        if(!title.isEmpty()){
+            PageHelper.startPage(pageNum,pageSize);
+            articleByType="";
+            articles = blogMapper.allArticles('%'+ title + '%',articleByType);
+        }
+        if(!articleByType.isEmpty()){
+            PageHelper.startPage(pageNum,pageSize);
+            title="";
+            articles = blogMapper.allArticles(title,articleByType);
+        }
         PageInfo<Articles> articlesPageInfo = new PageInfo<>(articles);
 
 //        拿出list进行Article的date数据格式化
@@ -36,7 +49,7 @@ public class BlogService {
             return articlesVo;
         }).collect(Collectors.toList());
 //      开始封装pageVo
-        PageVo pageVo = new PageVo(list, title,articlesPageInfo.getTotal(), articlesPageInfo.getPages(), pageNum);
+        PageVo pageVo = new PageVo(list, title,articlesPageInfo.getTotal(), articlesPageInfo.getPages(), pageNum,articleByType);
         System.out.println(pageVo);
         return pageVo;
     }
