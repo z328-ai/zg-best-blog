@@ -1,0 +1,33 @@
+server:
+  port: 8085
+spring:
+  thymeleaf:
+    enabled: true #开启thymeleaf视图解析
+    encoding: utf-8 #编码
+    prefix: classpath:/static/  #thymeleaf解析加上的前缀
+#    当修改thymeleaf页面时，每次要重启才能看到修改的页面因为我们看到是thymeleaf缓存的页面，无法热部署，所以我们关闭cache，实时看到更新页面
+    cache: false #是否使用缓存为false
+    suffix: .html #thymeleaf解析加上的后缀
+  datasource:
+    druid:
+      url: jdbc:mysql://118.25.25.174:3306/blog?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: Xinjing@12345
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 627389015@qq.com
+    password: fcldakymwhujbbhe
+    
+mybatis:
+  type-aliases-package: com.zgbest.zgBlogFront.domin
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.zgbest.zgBlogFront.mapper: debug
+
+
