@@ -68,18 +68,5 @@ public class BlogService {
         List<PopularArticleVo> popularArticleVos = blogMapper.popularArticle();
         return popularArticleVos;
     }
-//    public ArticleTimeNumVo articleTimeNum(){
-//        ArticleTimeNumVo articleTimeNumVo = new ArticleTimeNumVo();
-//        int month = 9;
-//        String startTime = "";
-//        String endTime = "";
-//        for (int i = 0; i < 5; i++) {
-//            if(month+1==12)
-//            startTime = "2023-0"+month+"-01";
-//            endTime = "2023-0"+(month+1)+"-01";
-//            Integer integer = blogMapper.articleTimeNum(startTime, endTime);
-//            articleTimeNumVo.nums.add(integer);
-//        }
-//        return articleTimeNumVo;
-//    }
+
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.zgbest.zgBlogFront.domin.vo.*;
 import com.zgbest.zgBlogFront.service.BlogService;
+import com.zgbest.zgBlogFront.service.EmailService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,23 +24,28 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private EmailService emailService;
      @GetMapping
     public ModelAndView BlogController
              (@RequestParam(name = "pageNum",defaultValue = "1") int pageNum,
               @RequestParam(name = "pageSize",defaultValue = "6") int pageSize,
              @RequestParam(name = "likeTitle",defaultValue = "") String likeTitle,
-              @RequestParam(name = "articleByType",defaultValue = "") String articleByType){
+              @RequestParam(name = "articleByType",defaultValue = "") String articleByType,
+              @RequestParam(name = "email",defaultValue = "") String email){
          ModelAndView modelAndView = new ModelAndView();
          PageVo pageVo = blogService.AllArticle(pageNum, pageSize,likeTitle,articleByType);
          List<ArticleTypeVo> articleTypeVos = blogService.allArticleType();
          List<PopularArticleVo> popularArticleVos = blogService.popularArticle();
-
          List<TagsVo> tagsVos = blogService.allTags();
+         if(!email.isEmpty()){
+             emailService.sendEmail(email);
+         }
          modelAndView.addObject("pageVo",pageVo);
          modelAndView.addObject("articleTypeVos",articleTypeVos);
          modelAndView.addObject("tagsVos",tagsVos);
          modelAndView.addObject("popularArticleVos",popularArticleVos);
-
+         modelAndView.addObject("emailMessage", EmailService.emailMessage);
          modelAndView.setViewName("blog");
          return modelAndView;
     }

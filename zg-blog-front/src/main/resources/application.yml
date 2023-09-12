@@ -14,6 +14,12 @@ spring:
       username: root
       password: Xinjing@12345
       driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 627389015@qq.com
+    password: fcldakymwhujbbhe
+    
 mybatis:
   type-aliases-package: com.zgbest.zgBlogFront.domin
   mapper-locations: classpath*:mapper/*Mapper.xml
@@ -23,4 +29,5 @@ mybatis:
 logging:
   level:
     com.zgbest.zgBlogFront.mapper: debug
+
 
