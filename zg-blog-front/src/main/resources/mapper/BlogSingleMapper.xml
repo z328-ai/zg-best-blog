@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会以namespace 和 id 在mapper 中查询具体的方法
+         resultType 表示返回对象的数据类型
+         parameterType 表示传入的数据对象
+         id  唯一标识，要与命名空间（抽象方法）中定义的方法名称一致
+ -->
+<mapper namespace="com.zgbest.zgBlogFront.mapper.BlogSingleMapper">
+    <select id="SingleArticleTags" resultMap="articleSingle">
+           select a.id, a.title,a.content,t.tags_name
+           from articles a
+           join article_tags atags on a.id = atags.article_id
+           join tags t on t.id = atags.tag_id
+           where a.id =#{aritlceId} ;
+    </select>
+
+    <resultMap id="articleSingle" type="SingleArticleTagsVo">
+        <id property="id" column="id"></id>
+        <result property="title" column="title"></result>
+        <result property="content" column="content"></result>
+        <collection property="tagsList" ofType="tags">
+            <result property="tagsName" column="tags_name"></result>
+        </collection>
+    </resultMap>
+   
+</mapper>

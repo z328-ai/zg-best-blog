@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:fragment="head">
 	<title>曾哥技术博客</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -68,9 +68,9 @@
 						<div class="row">
 							<div class="col-md-12" th:each="article : ${pageVo.list}">
 								<div class="blog-entry ftco-animate d-md-flex">
-									<a th:href="@{'single.html?id='+ ${article.id}}" class="img img-2" th:style="'background-image: url('+${article.articleImg}+')'"></a>
+									<a th:href="@{'blog/single/'+ ${article.id}}" class="img img-2" th:style="'background-image: url('+${article.articleImg}+')'"></a>
 									<div class="text text-2 p-4">
-										<h3 class="mb-2"><a th:href="@{'single.html?id='+ ${article.id}}" th:text="${article.title}"></a></h3>
+										<h3 class="mb-2"><a th:href="@{'blog/single/'+ ${article.id}}" th:text="${article.title}"></a></h3>
 										<div class="meta-wrap">
 											<p class="meta">
 												<span th:text="${article.created}"></span>
@@ -80,7 +80,7 @@
 											</p>
 										</div>
 										<p class="mb-4" th:text="${#strings.substring(article.content, 0, 80)}"></p>
-										<p><a th:href="@{'single.html?id='+ ${article.id}}" class="btn-custom" th:text="更多的阅读"><span class="ion-ios-arrow-forward"></span></a></p>
+										<p><a th:href="@{'blog/single/'+ ${article.id}}" class="btn-custom" th:text="更多的阅读"><span class="ion-ios-arrow-forward"></span></a></p>
 									</div>
 								</div>
 							</div>

@@ -4,20 +4,18 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.zgbest.zgBlogFront.domin.vo.*;
 import com.zgbest.zgBlogFront.service.BlogService;
+import com.zgbest.zgBlogFront.service.BlogSingleService;
 import com.zgbest.zgBlogFront.service.EmailService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ResponseBody
+
 @RequestMapping("/blog")
 @Controller
 public class BlogController {
@@ -26,6 +24,8 @@ public class BlogController {
     private BlogService blogService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private BlogSingleService blogSingleService;
      @GetMapping
     public ModelAndView BlogController
              (@RequestParam(name = "pageNum",defaultValue = "1") int pageNum,
@@ -48,6 +48,14 @@ public class BlogController {
          modelAndView.addObject("emailMessage", EmailService.emailMessage);
          modelAndView.setViewName("blog");
          return modelAndView;
+    }
+    @GetMapping("/single/{id}")
+    public ModelAndView BlogSingleController(@PathVariable("id") Integer id){
+        SingleArticleTagsVo singleArticleTagsVo = blogSingleService.SingleArticleTags(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("singleArticleTagsVo",singleArticleTagsVo);
+        modelAndView.setViewName("single");
+        return modelAndView;
     }
 
 }
