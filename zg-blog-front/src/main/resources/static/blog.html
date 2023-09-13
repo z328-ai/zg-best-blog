@@ -79,7 +79,7 @@
 												<span th:text="${article.comments}+'   comment'"></span>
 											</p>
 										</div>
-										<p class="mb-4" th:text="${#strings.substring(article.content, 0, 80)}"></p>
+										<p class="mb-4" th:utext="${#strings.substring(article.content, 0, 80)}"></p>
 										<p><a th:href="@{'blog/single/'+ ${article.id}}" class="btn-custom" th:text="更多的阅读"><span class="ion-ios-arrow-forward"></span></a></p>
 									</div>
 								</div>

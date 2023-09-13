@@ -24,5 +24,30 @@
             <result property="tagsName" column="tags_name"></result>
         </collection>
     </resultMap>
-   
+
+    <select id="authorComment" resultType="CommentsVo">
+        select c.id,u.name,c.content,a.created,u.avatar from comments c join articles a on c.article_id = a.id join users  u on c.user_id = u.id
+        where u.id =1
+        and a.id= #{id};
+    </select>
+
+    <select id="singleArticleComment" resultMap="commentMap">
+        select c.id,u.name,c.content,a.created,u.avatar,c.article_id from comments c join articles a on c.article_id = a.id join users  u on c.user_id = u.id
+        <where>
+                c.article_id = #{articleId} and
+            c.parent_comment_id=#{id};
+        </where>
+
+    </select>
+    <resultMap id="commentMap" type="CommentsVo">
+        <id property="id" column="id"></id>
+        <result property="content" column="content"></result>
+        <result property="created" column="created"></result>
+        <result property="articleId" column="article_id"/>
+        <result property="name" column="name"/>
+        <result property="avatar" column="avatar"></result>
+        <result property="parentCommentId" column="parent_comment_id"></result>
+        <collection property="commentsVoList" ofType="commentsVo"  column="{articleId=article_id,id=id}"  select="singleArticleComment">
+        </collection>
+    </resultMap>
 </mapper>

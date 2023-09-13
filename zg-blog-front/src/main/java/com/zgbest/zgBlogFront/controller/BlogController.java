@@ -52,10 +52,14 @@ public class BlogController {
     @GetMapping("/single/{id}")
     public ModelAndView BlogSingleController(@PathVariable("id") Integer id){
         SingleArticleTagsVo singleArticleTagsVo = blogSingleService.SingleArticleTags(id);
+        CommentsVo authorCommentsVo = blogSingleService.authorComment(id);
+        List<CommentsVo> commentsVos = blogSingleService.allComment(id);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("singleArticleTagsVo",singleArticleTagsVo);
+        modelAndView.addObject("authorComment",authorCommentsVo);
+        modelAndView.addObject("commentVos",commentsVos);
+        System.out.println(authorCommentsVo);
         modelAndView.setViewName("single");
         return modelAndView;
     }
-
 }
