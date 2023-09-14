@@ -2,11 +2,12 @@ package com.zgbest.zgBlogFront.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import com.zgbest.zgBlogFront.domin.entity.Comments;
+import com.zgbest.zgBlogFront.domin.entity.Users;
 import com.zgbest.zgBlogFront.domin.vo.*;
-import com.zgbest.zgBlogFront.service.BlogService;
-import com.zgbest.zgBlogFront.service.BlogSingleService;
-import com.zgbest.zgBlogFront.service.EmailService;
-import com.zgbest.zgBlogFront.service.UserService;
+import com.zgbest.zgBlogFront.mapper.BlogSingleMapper;
+import com.zgbest.zgBlogFront.service.*;
+import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,9 @@ public class BlogController {
     private BlogSingleService blogSingleService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BlogSingleMapper blogSingleMapper;
      @GetMapping
     public ModelAndView BlogController
              (@RequestParam(name = "pageNum",defaultValue = "1") int pageNum,
@@ -76,13 +82,25 @@ public class BlogController {
     }
     @PostMapping("/comment/submit/{articleId}")
     @ResponseBody
-    public String insertUserAndComment(@PathVariable("articleId") Integer articleId,
+    public UserVo insertUserAndComment(@PathVariable("articleId") Integer articleId,
                                        @RequestParam("message") String message,
                                        @RequestParam("inputAvatar") MultipartFile multipartFile,
                                        @RequestParam("inputName") String  inputName){
-        System.out.println(articleId);
-        System.out.println(message);
-        System.out.println(multipartFile.getOriginalFilename());
-         return "搜索";
+        UserVo userVo = new UserVo();
+        userVo.setName(inputName);
+        userVo.setMessage(message);
+        userVo.setArticleId(articleId);
+        String url = Upload.uploadPhoto(multipartFile);
+        userVo.setUrl(url);
+        blogSingleMapper.insertUser(userVo);
+        UserVo userVo1 = blogSingleMapper.selectUser(inputName);
+        Comments comments = new Comments();
+        comments.setArticleId(articleId);
+        comments.setCreated(new Date());
+        comments.setUserId(userVo1.getId());
+        comments.setParentCommentId(0);
+        comments.setContent(message);
+        blogSingleMapper.insertComment(comments);
+        return userVo;
     }
 }

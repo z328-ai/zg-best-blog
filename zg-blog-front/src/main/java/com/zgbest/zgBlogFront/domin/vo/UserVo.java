@@ -10,8 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class UserVo {
     private int id;
+    private int articleId;
     private String name;
     private String url;
     private String message;
     private String avatar;
+
 }

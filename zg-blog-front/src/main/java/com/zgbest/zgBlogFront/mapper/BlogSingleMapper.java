@@ -1,5 +1,6 @@
 package com.zgbest.zgBlogFront.mapper;
 
+import com.zgbest.zgBlogFront.domin.entity.Comments;
 import com.zgbest.zgBlogFront.domin.vo.CommentsVo;
 import com.zgbest.zgBlogFront.domin.vo.SingleArticleTagsVo;
 import com.zgbest.zgBlogFront.domin.vo.UserVo;
@@ -15,4 +16,8 @@ public interface BlogSingleMapper {
     List<CommentsVo> singleArticleComment(@Param("id") Integer id,@Param("articleId") Integer articleId);
 
     UserVo selectUser(String name);
+
+    void insertUser(UserVo userVo);
+
+    void insertComment(Comments comments);
 }

@@ -62,7 +62,7 @@
 										<img  th:src="${authorComment.avatar} " alt="Image placeholder" class="img-fluid mb-4">
 									</div>
 									<div class="desc">
-										<h3 th:text="${authorComment.name}"></h3>
+										<h3 id="articleId1" th:text="${authorComment.name}" data-th-articleId="${authorComment.articleId}"></h3>
 										<p th:text="${authorComment.content}"></p>
 									</div>
 								</div>
@@ -105,7 +105,7 @@
 											<div class="form-group">
 												<label for="website">头像</label>
 												<input  class="form-control" id="website" name="inputAvatar" type="file">
-												<img src="#" id="avatar" name="avatar" alt="Image placeholder" class="img-fluid mb-4">
+												<img src="#" id="avatar"  alt="Image placeholder" class="img-fluid mb-4">
 											</div>
 											<div csj></div>
 
@@ -205,11 +205,11 @@
 	<script th:src="@{/js/main.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
     <script th：inline="javascript">
-              var articleId = 0
-              var commentId= 0;
-			  function replyFunction(id,articleId){
+              var articleId= document.getElementById("articleId1").getAttribute("articleId");
+			  var avatar =""
+			  var commentId=0
+			  function replyFunction(id){
                  commentId = id;
-				  articleId =  articleId;
 			  }
               var commentForm =  document.getElementById("commentForm")
 			  var button1 =  document.getElementById("button1")
@@ -219,9 +219,10 @@
 				  console.log("点击")
 				  //如果commentId为o，则提交评论，不为0则是回复
 				  //已经注册，提交评论
-				  if(commentId===0 && formData.avatar === ""){
+				  if(commentId===0 && avatar === ""){
 					 axios.post("/blog/comment/submit/"+articleId,formData)
 					  .then(function (res) {
+						  document.getElementById("avatar").src = res.data.url;
 						  console.log(res)
 					  })
 				  }
@@ -231,7 +232,7 @@
 								  console.log(res)
 							  })
 				  }
-				  if(commentId==0 && formData.avatar ==""){
+				  if(commentId==0 && formData.avatar !==""){
 					  axios.post("/blog/user/submitComment/"+articleId, formData, {
 						  headers: {
 							  "Content-Type": "multipart/form-data"
@@ -259,10 +260,10 @@
 				  		function (res){
 				  			if(res.data.avatar){
 								document.getElementById("avatar").src = res.data.avatar;
-								formData.avatar = res.data.avatar;
+								avatar = res.data.avatar;
 							}else {
 								document.getElementById("avatar").src = "";
-								formData.avatar= "";
+								avatar= "";
 							}
 
 						}

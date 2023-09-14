@@ -53,4 +53,12 @@
     <select id="selectUser" resultType="UserVo">
         select * from users where name = #{name};
     </select>
+
+    <insert id="insertUser">
+        insert into  users (name,avatar) values (#{name},#{url});
+    </insert>
+
+    <insert id="insertComment">
+        insert into comments (content,created,user_id,article_id,parent_comment_id) values (#{content},#{created},#{userId},#{articleId},#{parentCommentId});
+    </insert>
 </mapper>

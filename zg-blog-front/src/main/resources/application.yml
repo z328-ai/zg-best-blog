@@ -19,7 +19,11 @@ spring:
     port: 587
     username: 627389015@qq.com
     password: fcldakymwhujbbhe
-    
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 mybatis:
   type-aliases-package: com.zgbest.zgBlogFront.domin
   mapper-locations: classpath*:mapper/*Mapper.xml
