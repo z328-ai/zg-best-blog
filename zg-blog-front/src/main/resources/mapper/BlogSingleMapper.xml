@@ -26,7 +26,7 @@
     </resultMap>
 
     <select id="authorComment" resultType="CommentsVo">
-        select c.id,u.name,c.content,a.created,u.avatar from comments c join articles a on c.article_id = a.id join users  u on c.user_id = u.id
+        select c.id,u.name,c.content,a.created,u.avatar,c.article_id from comments c join articles a on c.article_id = a.id join users  u on c.user_id = u.id
         where u.id =1
         and a.id= #{id};
     </select>
@@ -50,4 +50,7 @@
         <collection property="commentsVoList" ofType="commentsVo"  column="{articleId=article_id,id=id}"  select="singleArticleComment">
         </collection>
     </resultMap>
+    <select id="selectUser" resultType="UserVo">
+        select * from users where name = #{name};
+    </select>
 </mapper>

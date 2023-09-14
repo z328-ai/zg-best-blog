@@ -6,12 +6,15 @@ import com.zgbest.zgBlogFront.domin.vo.*;
 import com.zgbest.zgBlogFront.service.BlogService;
 import com.zgbest.zgBlogFront.service.BlogSingleService;
 import com.zgbest.zgBlogFront.service.EmailService;
+import com.zgbest.zgBlogFront.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,8 @@ public class BlogController {
     private EmailService emailService;
     @Autowired
     private BlogSingleService blogSingleService;
+    @Autowired
+    private UserService userService;
      @GetMapping
     public ModelAndView BlogController
              (@RequestParam(name = "pageNum",defaultValue = "1") int pageNum,
@@ -61,5 +66,23 @@ public class BlogController {
         System.out.println(authorCommentsVo);
         modelAndView.setViewName("single");
         return modelAndView;
+    }
+
+    @GetMapping("/user/isAvatar")
+    @ResponseBody
+    public UserVo isAvatar(String name){
+        UserVo avatar = userService.isAvatar(name);
+        return avatar;
+    }
+    @PostMapping("/comment/submit/{articleId}")
+    @ResponseBody
+    public String insertUserAndComment(@PathVariable("articleId") Integer articleId,
+                                       @RequestParam("message") String message,
+                                       @RequestParam("inputAvatar") MultipartFile multipartFile,
+                                       @RequestParam("inputName") String  inputName){
+        System.out.println(articleId);
+        System.out.println(message);
+        System.out.println(multipartFile.getOriginalFilename());
+         return "搜索";
     }
 }

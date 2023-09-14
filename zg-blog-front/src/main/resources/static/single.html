@@ -82,7 +82,7 @@
 													<h3 th:text="${commentVo.name}"></h3>
 													<div class="meta" th:text="${commentVo.created}"></div>
 													<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-													<p><a href="#" class="reply">Reply</a></p>
+													<p><a href="#" class="reply"  th:id="${commentVo.id}" th:data-articleId="${commentVo.articleId}" th:text="回复" onclick="replyFunction(this.id,this.articleId)"> </a></p>
 												</div>
 												<ul class="children"  th:if="${#lists.size(commentVo.commentsVoList)} > 0">
 
@@ -96,27 +96,25 @@
 									<!-- END comment-list -->
 
 									<div class="comment-form-wrap pt-5">
-										<h3 class="mb-5">Leave a comment</h3>
-										<form action="#" class="p-3 p-md-5 bg-light">
+										<h3 class="mb-5">留下你的品论</h3>
+										<form  id="commentForm" class="p-3 p-md-5 bg-light">
 											<div class="form-group">
 												<label for="name">Name *</label>
-												<input type="text" class="form-control" id="name">
+												<input type="text" class="form-control" id="name" name="inputName" onblur="byName()">
 											</div>
 											<div class="form-group">
-												<label for="email">Email *</label>
-												<input type="email" class="form-control" id="email">
+												<label for="website">头像</label>
+												<input  class="form-control" id="website" name="inputAvatar" type="file">
+												<img src="#" id="avatar" name="avatar" alt="Image placeholder" class="img-fluid mb-4">
 											</div>
-											<div class="form-group">
-												<label for="website">Website</label>
-												<input type="url" class="form-control" id="website">
-											</div>
+											<div csj></div>
 
 											<div class="form-group">
 												<label for="message">Message</label>
-												<textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+												<textarea name="message" id="message" cols="30" rows="10" class="form-control"></textarea>
 											</div>
 											<div class="form-group">
-												<input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+												<input type="button" id="button1" value="Post Comment" class="btn py-3 px-4 btn-primary" >
 											</div>
 
 										</form>
@@ -206,5 +204,71 @@
 	<script th:src="@{/js/google-map.js}"></script>
 	<script th:src="@{/js/main.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
+    <script th：inline="javascript">
+              var articleId = 0
+              var commentId= 0;
+			  function replyFunction(id,articleId){
+                 commentId = id;
+				  articleId =  articleId;
+			  }
+              var commentForm =  document.getElementById("commentForm")
+			  var button1 =  document.getElementById("button1")
+			  var formData =  {}
+			  button1.addEventListener("click", function(event) {
+				  formData =  new FormData(commentForm);
+				  console.log("点击")
+				  //如果commentId为o，则提交评论，不为0则是回复
+				  //已经注册，提交评论
+				  if(commentId===0 && formData.avatar === ""){
+					 axios.post("/blog/comment/submit/"+articleId,formData)
+					  .then(function (res) {
+						  console.log(res)
+					  })
+				  }
+				  if(commentId!=0 && formData.avatar !="" ){
+					  axios.post("/blog/comment/reply/"+articleId+"/"+articleId,formData)
+							  .then(function (res) {
+								  console.log(res)
+							  })
+				  }
+				  if(commentId==0 && formData.avatar ==""){
+					  axios.post("/blog/user/submitComment/"+articleId, formData, {
+						  headers: {
+							  "Content-Type": "multipart/form-data"
+						  }
+					  }).then(function (res) {
+						  console.log(res);
+					  });
+				  }
+				  if(commentId!=0 && formData.avatar !=""){
+					  axios.post("/blog/user/submitComment/"+articleId+"/" +articleId, formData, {
+						  headers: {
+							  "Content-Type": "multipart/form-data"
+						  }
+					  }).then(function (res) {
+						  console.log(res);
+					  });
+				  }
+
+			  })
+			  //输入名字，判断是否有该用户有的话，会先头像
+			  function byName(){
+				  formData =  new FormData(commentForm);
+                  axios.get("/blog/user/isAvatar?name="+formData.get('inputName'))
+				  .then(
+				  		function (res){
+				  			if(res.data.avatar){
+								document.getElementById("avatar").src = res.data.avatar;
+								formData.avatar = res.data.avatar;
+							}else {
+								document.getElementById("avatar").src = "";
+								formData.avatar= "";
+							}
+
+						}
+
+				  )
+			  }
+	</script>
   </body>
 </html>
